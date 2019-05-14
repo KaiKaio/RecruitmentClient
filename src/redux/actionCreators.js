@@ -1,0 +1,1 @@
+//  包含了n个action creator:  异步、同步action
