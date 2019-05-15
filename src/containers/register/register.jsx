@@ -10,6 +10,9 @@ import {
   Button
 } from 'antd-mobile'
 import Logo from '../../components/logo/logo'
+import { connect } from 'react-redux'
+import { register } from '../../redux/actionCreators'
+import { Redirect } from 'react-router-dom'
 
 const ListItem = List.Item
 
@@ -22,7 +25,7 @@ class Register extends React.Component {
   }
 
   register = ()=> {
-    console.log(this.state)
+    this.props.register(this.state)
   }
 
   toLogin = ()=> {
@@ -39,11 +42,16 @@ class Register extends React.Component {
 
   render() {
     const { type } = this.state
+    const { msg, redirectTo } = this.props.user
+    if(redirectTo) {
+      return <Redirect to={redirectTo}/>
+    }
     return (
       <div>
         <NavBar>招聘标题</NavBar>
         <Logo />
         <WingBlank>
+          { msg? <div className='error-msg'>{msg}</div> : null }
           <InputItem placeholder="请输入用户名" onChange={ val=> {this.handleChange('userName', val)} }>用户名：</InputItem>
           <WhiteSpace />
           <InputItem type="password" placeholder="请输入密码" onChange={ val=> {this.handleChange('password', val)} }>密&nbsp;&nbsp;&nbsp;码：</InputItem>
@@ -70,4 +78,13 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+const mapStateToProps = (state)=> ({
+  user: state.user
+})
+
+// const mapDispatchToProps = (dispatch)=> ({
+  
+// })
+
+
+export default connect(mapStateToProps, {register})(Register);
