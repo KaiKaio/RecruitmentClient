@@ -3,8 +3,17 @@ import {
   List,
   Grid
 } from 'antd-mobile'
+import PropTypes from 'prop-types'
 
 class AvatarSelector extends React.Component {
+  static propTypes = {
+    setAvatar: PropTypes.func.isRequired
+  }
+
+  state = {
+    icon: null
+  }
+
   constructor(props) {
     super(props)
     this.avatarList = []
@@ -15,13 +24,21 @@ class AvatarSelector extends React.Component {
       })
     }
   }
+
+  handleClick = ({text, icon})=> {
+    this.setState({icon})
+    this.props.setAvatar(text)
+  }
+
   render() {
-    const listHeader = '请选择头像'
+    const {icon} = this.state
+    const listHeader = icon ? (<div>已选择头像：<img src={icon} alt=""/></div>) : '请选择头像'
     return (
       <List renderHeader={()=> listHeader}>
         <Grid
           data={this.avatarList}
           columnNum='4'
+          onClick={this.handleClick}
         ></Grid>
       </List>
     )

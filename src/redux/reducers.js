@@ -4,6 +4,7 @@ import {
   AUTH_SUCCESS,
   ERROR_MSG
  } from './actionTypes'
+import { getRedirectTo } from '../utils'
 
 const defaultUser = {
   userName: '',
@@ -16,7 +17,8 @@ const defaultUser = {
 function user(state=defaultUser, action) {
   switch(action.type) {
     case AUTH_SUCCESS:
-      return {...action.data, redirectTo: '/'}
+      const { type, avatar } = action.data
+      return {...action.data, redirectTo: getRedirectTo(type, avatar)}
     case ERROR_MSG:
       return {...state, msg: action.data}
     default:
@@ -28,5 +30,3 @@ function user(state=defaultUser, action) {
 export default combineReducers({
   user
 })
-
-// 向外暴露的状态结构： { xxx: 0, yyy: 1 }
