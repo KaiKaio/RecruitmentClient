@@ -2,7 +2,9 @@
 import { combineReducers } from 'redux'
 import { 
   AUTH_SUCCESS,
-  ERROR_MSG
+  ERROR_MSG,
+  RECEIVE_USER,
+  RESET_USER
  } from './actionTypes'
 import { getRedirectTo } from '../utils'
 
@@ -21,6 +23,10 @@ function user(state=defaultUser, action) {
       return {...action.data, redirectTo: getRedirectTo(type, avatar)}
     case ERROR_MSG:
       return {...state, msg: action.data}
+    case RECEIVE_USER:
+      return action.data
+    case RESET_USER:
+      return {...defaultUser, msg: action.data}
     default:
       return state
   }

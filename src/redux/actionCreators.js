@@ -1,11 +1,15 @@
 //  包含了n个action creator:  异步、同步action
 import { 
   reqRegister,
-  reqLogin } from '../api'
+  reqLogin,
+  reqUpdateUser
+} from '../api'
 
 import { 
   AUTH_SUCCESS,
-  ERROR_MSG
+  ERROR_MSG,
+  RECEIVE_USER,
+  RESET_USER
  } from './actionTypes'
 
 const authSuccess = (user)=> ({
@@ -15,6 +19,16 @@ const authSuccess = (user)=> ({
 
 const errorMsg = (msg)=> ({
   type: ERROR_MSG,
+  data: msg
+})
+
+const receiveUser = (user)=> ({
+  type: RECEIVE_USER,
+  data: user
+})
+
+const resetUser = (msg)=> ({
+  type: RESET_USER,
   data: msg
 })
 
@@ -56,6 +70,18 @@ export const login = (user)=> {
       dispatch(authSuccess(result.data))
     } else {
       dispatch(errorMsg(result.msg))
+    }
+  }
+}
+
+export const updateUser = (user)=> {
+  return async dispatch=> {
+    const response = await reqUpdateUser(user)
+    const result = response.data
+    if(result.code === 0) {
+      dispatch(receiveUser(result.data))
+    } else {
+      dispatch(resetUser(result.msg))
     }
   }
 }
