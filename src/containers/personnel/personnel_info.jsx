@@ -5,6 +5,9 @@ import {
   TextareaItem,
   Button
 } from 'antd-mobile'
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { updateUser } from '../../redux/actionCreators'
 import AvatarSelector from '../../components/avatar-selector/avatar-selector'
 
 class PersonnelInfo extends React.Component {
@@ -27,10 +30,15 @@ class PersonnelInfo extends React.Component {
   }
 
   save = ()=> {
-    console.log(this.state)
+    this.props.updateUser(this.state)
   }
 
   render() {
+    const { avatar, type } = this.props.user
+    if(avatar) {
+      const path = type === 'personnel' ?  'personnel' : 'company'
+      return < Redirect to={path} />
+    }
     return (
       <div>
         <NavBar>个人信息完善</NavBar>
@@ -47,4 +55,8 @@ class PersonnelInfo extends React.Component {
   }
 }
 
-export default PersonnelInfo;
+const mapStateToProps = (state)=> ({
+  user: state.user
+})
+
+export default connect(mapStateToProps, {updateUser})(PersonnelInfo);
