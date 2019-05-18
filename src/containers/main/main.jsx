@@ -24,7 +24,7 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = (state)=> ({
-  state: state.user
+  user: state.user
 })
 
 export default connect(mapStateToProps, null)(Main);
