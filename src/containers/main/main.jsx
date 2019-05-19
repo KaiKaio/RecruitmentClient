@@ -13,6 +13,7 @@ import Message from '../message/message'
 import User from '../user/user'
 
 import NotFound from '../../components/not-found/not-found'
+import NavFooter from '../../components/nav-footer/nav-footer'
 
 import { getRedirectTo } from '../../utils'
 import { getUser } from '../../redux/actionCreators'
@@ -23,14 +24,14 @@ class Main extends React.Component {
       path: '/company',
       compnent: Company,
       title: '求职列表',
-      icon: 'qiuzhiren',
+      icon: 'renwu',
       text: '求职人'
     },
     {
       path: '/personnel',
       compnent: Personnel,
       title: '公司列表',
-      icon: 'gongsi',
+      icon: 'renwu',
       text: '公司'
     },
     {
@@ -44,7 +45,7 @@ class Main extends React.Component {
       path: '/user',
       compnent: User,
       title: '个人信息',
-      icon: 'geren',
+      icon: 'renwu',
       text: '个人'
     }
   ]
@@ -86,7 +87,7 @@ class Main extends React.Component {
           <Route path='/personnelinfo' component={PersonnelInfo} />
           <Route component={NotFound}/>
         </Switch>
-        {currentNav ? <div>底部导航</div> : null}
+        {currentNav ? <NavFooter navList={navList} /> : null}
       </div>
     )
   }
