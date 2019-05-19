@@ -2,15 +2,36 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Cookies from 'js-cookie'
 
 import CompanyInfo from '../company/company_info'
 import PersonnelInfo from '../personnel/personnel_info'
 
+import { getRedirectTo } from '../../utils'
+
 class Main extends React.Component {
+  componentDidMount() {
+    const userid = Cookies.get('userid')
+    const { _id } = this.props.user
+    if(userid && !_id) {
+      console.log('Ajax请求')
+    }
+  }
+
   render() {
+    const userid = Cookies.get('userid')
+    if(!userid) {
+      return <Redirect to='/login' />
+    }
     const { user } = this.props
     if(!user._id) {
-      return <Redirect to='/login' />
+      return null
+    } else {
+      let path = this.props.location.pathname
+      if(path==='/') {
+        path = getRedirectTo(user.type, user.avatar)
+        return <Redirect to={path} />
+      }
     }
     return (
       <div>
