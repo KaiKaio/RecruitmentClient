@@ -2,7 +2,8 @@
 import { 
   reqRegister,
   reqLogin,
-  reqUpdateUser
+  reqUpdateUser,
+  reqUser
 } from '../api'
 
 import { 
@@ -77,6 +78,19 @@ export const login = (user)=> {
 export const updateUser = (user)=> {
   return async dispatch=> {
     const response = await reqUpdateUser(user)
+    const result = response.data
+    if(result.code === 0) {
+      dispatch(receiveUser(result.data))
+    } else {
+      dispatch(resetUser(result.msg))
+    }
+  }
+}
+
+// 获取用户异步 action
+export const getUser = ()=> {
+  return async dispatch=> {
+    const response = await reqUser()
     const result = response.data
     if(result.code === 0) {
       dispatch(receiveUser(result.data))

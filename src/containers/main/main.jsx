@@ -8,13 +8,14 @@ import CompanyInfo from '../company/company_info'
 import PersonnelInfo from '../personnel/personnel_info'
 
 import { getRedirectTo } from '../../utils'
+import { getUser } from '../../redux/actionCreators'
 
 class Main extends React.Component {
   componentDidMount() {
     const userid = Cookies.get('userid')
     const { _id } = this.props.user
     if(userid && !_id) {
-      console.log('Ajax请求')
+      this.props.getUser()
     }
   }
 
@@ -48,4 +49,4 @@ const mapStateToProps = (state)=> ({
   user: state.user
 })
 
-export default connect(mapStateToProps, null)(Main);
+export default connect(mapStateToProps, {getUser})(Main);
