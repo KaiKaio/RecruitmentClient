@@ -24,14 +24,14 @@ class Main extends React.Component {
       path: '/company',
       compnent: Company,
       title: '求职列表',
-      icon: 'renwu',
+      icon: 'caidan',
       text: '求职人'
     },
     {
       path: '/personnel',
       compnent: Personnel,
       title: '公司列表',
-      icon: 'renwu',
+      icon: 'caidan',
       text: '公司'
     },
     {
@@ -76,12 +76,20 @@ class Main extends React.Component {
     const {navList} = this
     const path = this.props.location.pathname
     const currentNav = navList.find(nav=> nav.path === path)
+
+    if(currentNav) {
+      if(user.type === 'company') {
+        navList[1].hide = true
+      } else {
+        navList[0].hide = true
+      }
+    }
     return (
       <div>
         {currentNav ? <NavBar>{currentNav.title}</NavBar> : null}
         <Switch>
           {
-            navList.map(nav=> <Route path={nav.path} component={nav.compnent} />)
+            navList.map(nav=> <Route key={nav.path} path={nav.path} component={nav.compnent} />)
           }
           <Route path='/companyinfo' component={CompanyInfo} />
           <Route path='/personnelinfo' component={PersonnelInfo} />

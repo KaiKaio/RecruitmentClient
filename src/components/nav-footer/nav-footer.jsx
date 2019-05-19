@@ -10,7 +10,8 @@ class NavFooter extends React.Component {
     navList: PropTypes.array.isRequired
   }
   render() {
-    const {navList} = this.props
+    let {navList} = this.props
+    navList = navList.filter(nav=> !nav.hide)
     const path = this.props.location.pathname
     return (
       <div>
