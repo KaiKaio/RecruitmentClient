@@ -20,7 +20,7 @@ class AvatarSelector extends React.Component {
     for(let i = 0; i < 4; i++) {
       this.avatarList.push({
         text: `头像${i+1}`,
-        icon: require(`./images/icon-test_${i+1}.png`)
+        icon: require(`../../assets/images/头像${i+1}.png`)
       })
     }
   }
