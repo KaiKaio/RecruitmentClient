@@ -3,14 +3,18 @@ import {
   reqRegister,
   reqLogin,
   reqUpdateUser,
-  reqUser
+  reqUser,
+
+  reqUserList
 } from '../api'
 
 import { 
   AUTH_SUCCESS,
   ERROR_MSG,
   RECEIVE_USER,
-  RESET_USER
+  RESET_USER,
+
+  RECEIVE_USER_LIST
  } from './actionTypes'
 
 const authSuccess = (user)=> ({
@@ -31,6 +35,11 @@ const receiveUser = (user)=> ({
 export const resetUser = (msg)=> ({
   type: RESET_USER,
   data: msg
+})
+
+export const receiveUserList = (userList)=> ({
+  type: RECEIVE_USER_LIST,
+  data: userList
 })
 
 // 注册异步 action
@@ -96,6 +105,16 @@ export const getUser = ()=> {
       dispatch(receiveUser(result.data))
     } else {
       dispatch(resetUser(result.msg))
+    }
+  }
+}
+
+export const getUserList = (type)=> {
+  return async dispatch => {
+    const response = await reqUserList(type)
+    const result = response.data
+    if(result.code === 0) {
+      dispatch(receiveUserList(result.data))
     }
   }
 }

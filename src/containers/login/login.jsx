@@ -41,7 +41,7 @@ class Login extends React.Component {
     }
     return (
       <div>
-        <NavBar>招聘标题</NavBar>
+        <NavBar>招聘啦</NavBar>
         <Logo />
         <WingBlank>
           { msg? <div className='error-msg'>{msg}</div> : null }
