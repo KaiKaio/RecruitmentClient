@@ -1,5 +1,5 @@
 import React from 'react'
-import { Result, List, Button, Modal } from 'antd-mobile'
+import { Result, List, Button, Modal, WhiteSpace } from 'antd-mobile'
 import { connect } from 'react-redux'
 import Cookies from 'js-cookie'
 import { resetUser } from '../../redux/actionCreators'
@@ -29,7 +29,7 @@ class User extends React.Component {
   render() {
     const { userName, avatar, company, post, salary, info} = this.props.user
     return (
-      <div>
+      <div style={{paddingTop: 50}}>
         <Result 
           img={<img src={require(`../../assets/images/${avatar}.png`)} style={{width: 50}} alt={avatar}/>}
           title={userName}
@@ -42,7 +42,7 @@ class User extends React.Component {
             {salary ? <Brief>薪资：{salary}</Brief> : null}
           </Item>
         </List>
-        <Button type='warning' onClick={this.logout}>退出登录</Button>
+        <Button style={{marginTop: 10}} type='warning' onClick={this.logout}>退出登录</Button>
       </div>
     )
   }

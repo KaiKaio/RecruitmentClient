@@ -12,7 +12,7 @@ class UserList extends React.Component{
   render() {
     const {userList} = this.props
     return (
-      <WingBlank>
+      <WingBlank style={{paddingBottom: 50, paddingTop: 50}}>
         {userList.map(user=> (
           <div key={user._id}>
             <WhiteSpace />
