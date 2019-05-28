@@ -1,5 +1,5 @@
 import React from 'react'
-import { Result, List, Button, Modal, WhiteSpace } from 'antd-mobile'
+import { Result, List, Button, Modal } from 'antd-mobile'
 import { connect } from 'react-redux'
 import Cookies from 'js-cookie'
 import { resetUser } from '../../redux/actionCreators'
