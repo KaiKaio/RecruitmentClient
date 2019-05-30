@@ -94,7 +94,7 @@ class Main extends React.Component {
           }
           <Route path='/companyinfo' component={CompanyInfo} />
           <Route path='/personnelinfo' component={PersonnelInfo} />
-          <Route path='/chat/:userid' compnent={Chat} />
+          <Route path='/chat/:userid' component={Chat} />
           <Route component={NotFound}/>
         </Switch>
         {currentNav ? <NavFooter navList={navList} /> : null}
