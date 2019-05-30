@@ -11,9 +11,10 @@ import Company from '../company/company'
 import Personnel from '../personnel/personnel'
 import Message from '../message/message'
 import User from '../user/user'
-
 import NotFound from '../../components/not-found/not-found'
 import NavFooter from '../../components/nav-footer/nav-footer'
+import Chat from '../chat/chat'
+
 
 import { getRedirectTo } from '../../utils'
 import { getUser } from '../../redux/actionCreators'
@@ -93,6 +94,7 @@ class Main extends React.Component {
           }
           <Route path='/companyinfo' component={CompanyInfo} />
           <Route path='/personnelinfo' component={PersonnelInfo} />
+          <Route path='/chat/:userid' compnent={Chat} />
           <Route component={NotFound}/>
         </Switch>
         {currentNav ? <NavFooter navList={navList} /> : null}
