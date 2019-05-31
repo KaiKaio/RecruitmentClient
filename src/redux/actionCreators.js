@@ -17,6 +17,17 @@ import {
   RECEIVE_USER_LIST
  } from './actionTypes'
 
+import io from 'socket.io-client'
+
+function initIo() {
+  if(!io.socket) {
+    io.socket = io('ws://localhost:4000')
+    io.socket.on('receiveMsg', function(chatMsg) {
+      console.log('客户端 <= 服务器' , chatMsg)
+    })
+  }
+}
+
 const authSuccess = (user)=> ({
   type: AUTH_SUCCESS,
   data: user
@@ -121,6 +132,8 @@ export const getUserList = (type)=> {
 
 export const sendMsg = ({from, to, content})=> {
   return dispatch=> {
-    console.log('发消息', {from, to, content})
+    console.log('客户端 => 服务器', {from, to, content})
+    initIo()
+    io.socket.emit('sendMsg', {from, to, content})
   }
 }
