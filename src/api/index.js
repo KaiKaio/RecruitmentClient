@@ -13,3 +13,7 @@ export const reqUpdateUser = (user)=> ajax('/update', user, 'POST')
 export const reqUser = ()=> ajax('/user')
 
 export const reqUserList = (type)=> ajax('/userlist', {type}, 'GET')
+
+export const reqChatMsgList = ()=> ajax('/msglist')
+
+export const reqReadMsg = (from)=> ajax('/readmsg', {from}, 'POST')

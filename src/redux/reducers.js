@@ -5,9 +5,11 @@ import {
   ERROR_MSG,
   RECEIVE_USER,
   RESET_USER,
-  
-  RECEIVE_USER_LIST
+  RECEIVE_USER_LIST,
+  RECEIVE_MSG_LIST,
+  RECEIVE_MSG
  } from './actionTypes'
+
 import { getRedirectTo } from '../utils'
 
 const defaultUser = {
@@ -18,6 +20,12 @@ const defaultUser = {
 }
 
 const defaultUserList = []
+
+const defaultChat = {
+  users: {},
+  chatMsgs: [],
+  unReadCount: 0
+}
 
 // 产生 user 状态 reducer
 function user(state=defaultUser, action) {
@@ -45,7 +53,24 @@ function userList(state=defaultUserList, action) {
   } 
 }
 
+function chat(state=defaultChat, action) {
+  switch(action.type) {
+    case RECEIVE_MSG_LIST: 
+      const { users, chatMsgs } = action.data
+      return {
+        users,
+        chatMsgs,
+        unReadCount: 0
+      }
+    case RECEIVE_MSG:
+      return 
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   user,
-  userList
+  userList,
+  chat
 })

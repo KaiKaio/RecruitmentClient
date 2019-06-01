@@ -4,8 +4,9 @@ import {
   reqLogin,
   reqUpdateUser,
   reqUser,
-
-  reqUserList
+  reqUserList,
+  reqChatMsgList,
+  reqReadMsg
 } from '../api'
 
 import { 
@@ -13,8 +14,9 @@ import {
   ERROR_MSG,
   RECEIVE_USER,
   RESET_USER,
-
-  RECEIVE_USER_LIST
+  RECEIVE_USER_LIST,
+  RECEIVE_MSG_LIST,
+  RECEIVE_MSG
  } from './actionTypes'
 
 import io from 'socket.io-client'
@@ -25,6 +27,18 @@ function initIo() {
     io.socket.on('receiveMsg', function(chatMsg) {
       console.log('客户端 <= 服务器' , chatMsg)
     })
+  }
+}
+ 
+// 异步获取 消息列表 数据
+async function getMsgList(dispatch) {
+  initIo()
+  const response = await reqChatMsgList()
+  const result = response.data
+  if(result.code === 0) {
+    const { users, chatMsgs } = result.data
+    // 分发同步 action
+    dispatch(receiveMsgList({users, chatMsgs}))
   }
 }
 
@@ -53,6 +67,10 @@ export const receiveUserList = (userList)=> ({
   data: userList
 })
 
+export const receiveMsgList = ({users, chatMsgs})=> ({
+  type: RECEIVE_MSG_LIST,
+  data: {users, chatMsgs}
+})
 // 注册异步 action
 export const register = (user)=> {
   const {userName, password, confirm, type} = user
@@ -68,6 +86,7 @@ export const register = (user)=> {
     const response = await reqRegister({userName, password, type})
     const result = response.data
     if(result.code === 0) {
+      getMsgList(dispatch)
       dispatch(authSuccess(result.data))
     } else {
       dispatch(errorMsg(result.msg))
@@ -88,6 +107,7 @@ export const login = (user)=> {
     const response = await reqLogin(user)
     const result = response.data
     if(result.code === 0) {
+      getMsgList(dispatch)
       dispatch(authSuccess(result.data))
     } else {
       dispatch(errorMsg(result.msg))
@@ -113,6 +133,7 @@ export const getUser = ()=> {
     const response = await reqUser()
     const result = response.data
     if(result.code === 0) {
+      getMsgList(dispatch)
       dispatch(receiveUser(result.data))
     } else {
       dispatch(resetUser(result.msg))
@@ -133,7 +154,6 @@ export const getUserList = (type)=> {
 export const sendMsg = ({from, to, content})=> {
   return dispatch=> {
     console.log('客户端 => 服务器', {from, to, content})
-    initIo()
     io.socket.emit('sendMsg', {from, to, content})
   }
 }
