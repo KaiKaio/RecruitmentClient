@@ -15,6 +15,7 @@ class UserList extends React.Component{
     return (
       <WingBlank style={{paddingBottom: 50, paddingTop: 50}}>
         {userList.map(user=> (
+          user.avatar ? 
           <div key={user._id}>
             <WhiteSpace />
             <Card onClick={()=> this.props.history.push(`/chat/${user._id}`)}>
@@ -29,7 +30,7 @@ class UserList extends React.Component{
                 <div>描述：{user.info}</div>
               </Body>
             </Card>
-          </div>
+          </div> : null
         ))}
       </WingBlank>
     )
