@@ -6,7 +6,7 @@ import {
   reqUser,
   reqUserList,
   reqChatMsgList,
-  reqReadMsg
+  // reqReadMsg
 } from '../api'
 
 import { 
@@ -21,18 +21,21 @@ import {
 
 import io from 'socket.io-client'
 
-function initIo() {
+function initIo(dispatch, userid) {
   if(!io.socket) {
     io.socket = io('ws://localhost:4000')
     io.socket.on('receiveMsg', function(chatMsg) {
       console.log('客户端 <= 服务器' , chatMsg)
+      if(userid === chatMsg.from || userid === chatMsg.to) {
+        dispatch(receiveMsg(chatMsg))
+      }
     })
   }
 }
  
 // 异步获取 消息列表 数据
-async function getMsgList(dispatch) {
-  initIo()
+async function getMsgList(dispatch, userid) {
+  initIo(dispatch, userid)
   const response = await reqChatMsgList()
   const result = response.data
   if(result.code === 0) {
@@ -62,15 +65,21 @@ export const resetUser = (msg)=> ({
   data: msg
 })
 
-export const receiveUserList = (userList)=> ({
+const receiveUserList = (userList)=> ({
   type: RECEIVE_USER_LIST,
   data: userList
 })
 
-export const receiveMsgList = ({users, chatMsgs})=> ({
+const receiveMsgList = ({users, chatMsgs})=> ({
   type: RECEIVE_MSG_LIST,
   data: {users, chatMsgs}
 })
+
+const receiveMsg = (chatMsg)=> ({
+  type: RECEIVE_MSG,
+  data: chatMsg
+})
+
 // 注册异步 action
 export const register = (user)=> {
   const {userName, password, confirm, type} = user
@@ -86,7 +95,7 @@ export const register = (user)=> {
     const response = await reqRegister({userName, password, type})
     const result = response.data
     if(result.code === 0) {
-      getMsgList(dispatch)
+      getMsgList(dispatch, result.data._id)
       dispatch(authSuccess(result.data))
     } else {
       dispatch(errorMsg(result.msg))
@@ -107,7 +116,7 @@ export const login = (user)=> {
     const response = await reqLogin(user)
     const result = response.data
     if(result.code === 0) {
-      getMsgList(dispatch)
+      getMsgList(dispatch, result.data._id)
       dispatch(authSuccess(result.data))
     } else {
       dispatch(errorMsg(result.msg))
@@ -133,7 +142,7 @@ export const getUser = ()=> {
     const response = await reqUser()
     const result = response.data
     if(result.code === 0) {
-      getMsgList(dispatch)
+      getMsgList(dispatch, result.data._id)
       dispatch(receiveUser(result.data))
     } else {
       dispatch(resetUser(result.msg))

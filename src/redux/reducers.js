@@ -63,7 +63,12 @@ function chat(state=defaultChat, action) {
         unReadCount: 0
       }
     case RECEIVE_MSG:
-      return 
+      const chatMsg = action.data
+      return {
+        users: state.users,
+        chatMsgs: [...state.chatMsgs, chatMsg], //在后面加一个chatMSG,原来的不变
+        unReadCount: 0
+      }
     default:
       return state
   }
