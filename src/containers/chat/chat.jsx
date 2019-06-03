@@ -1,13 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { InputItem, NavBar, List } from 'antd-mobile'
+import { InputItem, NavBar, List, Grid } from 'antd-mobile'
 import { sendMsg } from '../../redux/actionCreators'
 
 const Item = List.Item
 
 class Chat extends React.Component {
   state = {
-    content: ''
+    content: '',
+    isShow: false // 是否显示表情列表
+  }
+
+  componentWillMount() {
+    const emojis = ['😀','😅','😂','😘','😡']
+    this.emojis = emojis.map(emoji=> ({text: emoji}))
+  }
+
+  toggleShow = ()=> {
+    const isShow = !this.state.isShow
+    this.setState({isShow})
+    if(isShow) {
+      setTimeout(()=> {
+        window.dispatchEvent(new Event('resize'))
+      }, 0)
+    }
   }
 
   handleSend = ()=> {
@@ -18,7 +34,10 @@ class Chat extends React.Component {
     if(content) {
       this.props.sendMsg({from, to, content})
     }
-    this.setState({content: ''})
+    this.setState({
+      content: '',
+      isShow: false
+    })
   }
 
   render(){
@@ -70,10 +89,24 @@ class Chat extends React.Component {
             placeholder="请输入"
             value={this.state.content}
             onChange={val=> this.setState({content: val})}
+            onFocus={()=> this.setState({isShow: false})}
             extra={
-              <span onClick={this.handleSend}>发送</span>
+              <span>
+                <span onClick={this.toggleShow} style={{marginRight: 5}}>🙂</span>
+                <span onClick={this.handleSend}>发送</span>
+              </span>
             }
           />
+          {this.state.isShow ? (
+            <Grid
+            data={this.emojis}
+            columnNum={8}
+            carouselMaxRow={4}
+            isCarousel={true}
+            onClick={(item)=> {
+              this.setState({content: this.state.content + item.text})
+            }}
+          />) : null}
         </div>
       </div>
     )
