@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { InputItem, NavBar, List, Grid } from 'antd-mobile'
+import { InputItem, NavBar, List, Grid, Icon } from 'antd-mobile'
 import { sendMsg } from '../../redux/actionCreators'
 
 const Item = List.Item
@@ -14,6 +14,14 @@ class Chat extends React.Component {
   componentWillMount() {
     const emojis = ['😀','😅','😂','😘','😡']
     this.emojis = emojis.map(emoji=> ({text: emoji}))
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+
+  componentDidUpdate() {
+    window.scrollTo(0, document.body.scrollHeight)
   }
 
   toggleShow = ()=> {
@@ -57,8 +65,14 @@ class Chat extends React.Component {
     const targetIcon = targetAvatar ? require(`../../assets/images/${targetAvatar}.png`) : null
     return(
       <div id="chat-page">
-        <NavBar></NavBar>
-        <List>
+        <NavBar 
+          icon={<Icon type='left'/>}
+          className='sticky-header'
+          onLeftClick={()=> this.props.history.goBack()}
+        >
+        {users[targetId].userName}
+        </NavBar>
+        <List style={{marginTop: 48, marginBottom: 48}}>
           {
             msgs.map(msg=> {
               if(targetId === msg.from) {
@@ -92,7 +106,11 @@ class Chat extends React.Component {
             onFocus={()=> this.setState({isShow: false})}
             extra={
               <span>
-                <span onClick={this.toggleShow} style={{marginRight: 5}}>🙂</span>
+                <span 
+                  onClick={this.toggleShow}
+                  aria-label= 'emojis'
+                  role="img"
+                  style={{marginRight: 5}}>🙂</span>
                 <span onClick={this.handleSend}>发送</span>
               </span>
             }
