@@ -30,13 +30,12 @@ class Message extends React.Component {
     const { user } = this.props
     const { users, chatMsgs } = this.props.chat
     const lastMsgs = getLastMsgs(chatMsgs)
-    console.log(lastMsgs)
     return (
       <List style={{marginTop: 50, marginBottom: 50}}>
         {
           lastMsgs.map(msg=> {
-            const targetUserId = msg.to === user.id ? msg.from : msg.to
-            const targetUser = msg.to === user.id ? users[targetUserId ] : users[targetUserId]
+            const targetUserId = msg.to === user._id ? msg.from : msg.to
+            const targetUser = users[targetUserId]
             return (
               <Item
                 key={msg._id}
