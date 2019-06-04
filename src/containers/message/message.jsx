@@ -5,17 +5,25 @@ import { List, Badge } from 'antd-mobile'
 const Item = List.Item
 const Brief = Item.Brief
 
-function getLastMsgs(chatMsgs) {
+function getLastMsgs(chatMsgs, userid) {
   const lastMsgObjs = {}
   chatMsgs.forEach(msg=> {
+    if(msg.to === userid && !msg.read) {
+      msg.unReadCount = 1
+    } else {
+      msg.unReadCount = 0
+    }
+
     const chatId = msg.chat_id
     const lastMsg = lastMsgObjs[chatId]
     if(!lastMsg) {
       lastMsgObjs[chatId] = msg
     } else {
+      const unReadCount = lastMsg.unReadCount + msg.unReadCount
       if(msg.create_time > lastMsg.create_time) {
         lastMsgObjs[chatId] = msg
       }
+      lastMsgObjs[chatId].unReadCount = unReadCount
     }
   })
   const lastMsgs = Object.values(lastMsgObjs)
@@ -29,7 +37,7 @@ class Message extends React.Component {
   render() {
     const { user } = this.props
     const { users, chatMsgs } = this.props.chat
-    const lastMsgs = getLastMsgs(chatMsgs)
+    const lastMsgs = getLastMsgs(chatMsgs, user._id)
     return (
       <List style={{marginTop: 50, marginBottom: 50}}>
         {
@@ -39,7 +47,7 @@ class Message extends React.Component {
             return (
               <Item
                 key={msg._id}
-                extra={<Badge text={0} />}
+                extra={<Badge text={msg.unReadCount} />}
                 thumb={targetUser.avatar ? require(`../../assets/images/${targetUser.avatar}.png`) : null}
                 arrow='horizontal'
                 onClick={()=> this.props.history.push(`/chat/${targetUserId}`)}
