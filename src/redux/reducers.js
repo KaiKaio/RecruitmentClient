@@ -56,18 +56,19 @@ function userList(state=defaultUserList, action) {
 function chat(state=defaultChat, action) {
   switch(action.type) {
     case RECEIVE_MSG_LIST: 
-      const { users, chatMsgs } = action.data
+      const { users, chatMsgs, userid } = action.data
       return {
         users,
         chatMsgs,
-        unReadCount: 0
+        unReadCount: chatMsgs.reduce((preTotal, msg)=> 
+          preTotal + (!msg.read && msg.to === userid ? 1 : 0),0)
       }
     case RECEIVE_MSG:
-      const chatMsg = action.data
+      const { chatMsg } = action.data
       return {
         users: state.users,
         chatMsgs: [...state.chatMsgs, chatMsg], //在后面加一个chatMSG,原来的不变
-        unReadCount: 0
+        unReadCount: state.unReadCount + (!chatMsg.read && chatMsg.to === action.data.userid ? 1 : 0)
       }
     default:
       return state

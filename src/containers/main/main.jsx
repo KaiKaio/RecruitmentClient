@@ -63,7 +63,7 @@ class Main extends React.Component {
     if(!userid) {
       return <Redirect to='/login' />
     }
-    const { user } = this.props
+    const { user, unReadCount } = this.props
     if(!user._id) {
       return null
     } else {
@@ -97,14 +97,15 @@ class Main extends React.Component {
           <Route path='/chat/:userid' component={Chat} />
           <Route component={NotFound}/>
         </Switch>
-        {currentNav ? <NavFooter navList={navList} /> : null}
+        {currentNav ? <NavFooter navList={navList} unReadCount={unReadCount} /> : null}
       </div>
     )
   }
 }
 
 const mapStateToProps = (state)=> ({
-  user: state.user
+  user: state.user,
+  unReadCount: state.chat.unReadCount
 })
 
 export default connect(mapStateToProps, {getUser})(Main);

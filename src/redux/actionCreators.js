@@ -27,7 +27,7 @@ function initIo(dispatch, userid) {
     io.socket.on('receiveMsg', function(chatMsg) {
       console.log('客户端 <= 服务器' , chatMsg)
       if(userid === chatMsg.from || userid === chatMsg.to) {
-        dispatch(receiveMsg(chatMsg))
+        dispatch(receiveMsg(chatMsg, userid))
       }
     })
   }
@@ -41,7 +41,7 @@ async function getMsgList(dispatch, userid) {
   if(result.code === 0) {
     const { users, chatMsgs } = result.data
     // 分发同步 action
-    dispatch(receiveMsgList({users, chatMsgs}))
+    dispatch(receiveMsgList({users, chatMsgs, userid}))
   }
 }
 
@@ -70,14 +70,14 @@ const receiveUserList = (userList)=> ({
   data: userList
 })
 
-const receiveMsgList = ({users, chatMsgs})=> ({
+const receiveMsgList = ({users, chatMsgs, userid})=> ({
   type: RECEIVE_MSG_LIST,
-  data: {users, chatMsgs}
+  data: {users, chatMsgs, userid}
 })
 
-const receiveMsg = (chatMsg)=> ({
+const receiveMsg = (chatMsg, userid)=> ({
   type: RECEIVE_MSG,
-  data: chatMsg
+  data: { chatMsg, userid }
 })
 
 // 注册异步 action
