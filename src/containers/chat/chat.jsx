@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import QueueAnim from 'rc-queue-anim'
 import { InputItem, NavBar, List, Grid, Icon } from 'antd-mobile'
 import { sendMsg, readMsg } from '../../redux/actionCreators'
 
@@ -79,30 +80,32 @@ class Chat extends React.Component {
         {users[targetId].userName}
         </NavBar>
         <List style={{marginTop: 48, marginBottom: 48}}>
-          {
-            msgs.map(msg=> {
-              if(targetId === msg.from) {
-                return (
-                  <Item
-                    key={msg._id}
-                    thumb={targetIcon}
-                  >
-                    {msg.content}
-                  </Item>
-                )
-              } else {
-                return (
-                  <Item
-                    key={msg._id}
-                    className='chat-me'
-                    extra='我'
-                  >
-                    {msg.content}
-                  </Item>
-                )
-              }
-            })
-          }
+          <QueueAnim type='alpha' delay={100}>
+            {
+              msgs.map(msg=> {
+                if(targetId === msg.from) {
+                  return (
+                    <Item
+                      key={msg._id}
+                      thumb={targetIcon}
+                    >
+                      {msg.content}
+                    </Item>
+                  )
+                } else {
+                  return (
+                    <Item
+                      key={msg._id}
+                      className='chat-me'
+                      extra='我'
+                    >
+                      {msg.content}
+                    </Item>
+                  )
+                }
+              })
+            }
+          </QueueAnim>
         </List>
         <div className="am-tab-bar">
           <InputItem 
