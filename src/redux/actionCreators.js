@@ -6,7 +6,7 @@ import {
   reqUser,
   reqUserList,
   reqChatMsgList,
-  // reqReadMsg
+  reqReadMsg
 } from '../api'
 
 import { 
@@ -16,7 +16,8 @@ import {
   RESET_USER,
   RECEIVE_USER_LIST,
   RECEIVE_MSG_LIST,
-  RECEIVE_MSG
+  RECEIVE_MSG,
+  MSG_READ
  } from './actionTypes'
 
 import io from 'socket.io-client'
@@ -78,6 +79,11 @@ const receiveMsgList = ({users, chatMsgs, userid})=> ({
 const receiveMsg = (chatMsg, userid)=> ({
   type: RECEIVE_MSG,
   data: { chatMsg, userid }
+})
+
+const msgRead = ({count, from, to})=> ({
+  type: MSG_READ,
+  data:  {count, from, to}
 })
 
 // 注册异步 action
@@ -164,5 +170,16 @@ export const sendMsg = ({from, to, content})=> {
   return dispatch=> {
     console.log('客户端 => 服务器', {from, to, content})
     io.socket.emit('sendMsg', {from, to, content})
+  }
+}
+
+export const readMsg = (from, to)=> {
+  return async dispatch=> {
+    const response = await reqReadMsg(from)
+    const result = response.data
+    if(result.code === 0) {
+      const count = result.data
+      dispatch(msgRead({count, from, to}))
+    }
   }
 }

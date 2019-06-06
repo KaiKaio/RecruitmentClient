@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { InputItem, NavBar, List, Grid, Icon } from 'antd-mobile'
-import { sendMsg } from '../../redux/actionCreators'
+import { sendMsg, readMsg } from '../../redux/actionCreators'
 
 const Item = List.Item
 
@@ -22,6 +22,12 @@ class Chat extends React.Component {
 
   componentDidUpdate() {
     window.scrollTo(0, document.body.scrollHeight)
+  }
+
+  componentWillUnmount() {
+    const from = this.props.match.params.userid
+    const to = this.props.user._id
+    this.props.readMsg(from, to)
   }
 
   toggleShow = ()=> {
@@ -136,4 +142,4 @@ const mapStateToProps = (state)=>({
   chat: state.chat
 })
 
-export default connect(mapStateToProps, {sendMsg})(Chat);
+export default connect(mapStateToProps, {sendMsg, readMsg})(Chat);
