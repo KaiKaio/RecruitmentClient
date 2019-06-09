@@ -12,9 +12,9 @@ function ajax(url, data={}, method='GET') {
     if(paramStr) {
       paramStr = paramStr.substring(0, paramStr.length-1)
     }
-    return axios.get('http://localhost:4000' + url + '?' + paramStr)
+    return axios.get('http://47.100.121.227' + url + '?' + paramStr)
   } else {
-    return axios.post('http://localhost:4000' + url, data)
+    return axios.post('http://47.100.121.227' + url, data)
   }
 }
 
