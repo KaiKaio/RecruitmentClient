@@ -1,12 +1,14 @@
 {
   "name": "recruitmentclient",
   "version": "0.1.0",
+  "homepage": "https://18898286061.github.io/RecruitmentClient",
   "private": true,
   "dependencies": {
     "antd-mobile": "^2.2.13",
     "axios": "^0.18.0",
     "babel-plugin-import": "^1.11.0",
     "customize-cra": "^0.2.12",
+    "gh-pages": "^2.0.1",
     "js-cookie": "^2.2.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
@@ -23,6 +25,8 @@
     "socket.io": "^2.2.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
